@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Palash Sethi, PhD candidate in Computational Biology at the University of Florida. Interpretable machine learning for proteins, genotypes and bacterial genomes.">
+<title>Pal Sethi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: calm academic page with generous whitespace. Hero = live fitness landscape. Then a four-scale "ladder" linking every paper to one question, two figure spreads for the lead papers, a clean paper list, and a short CV. */
+:root{
+  --paper:#f2f3ee;     /* soft sage-white */
+  --card:#fbfbf8;
+  --ink:#172630;
+  --muted:#5f6e72;
+  --line:#d7ddd3;
+  --soft:#e6eae1;
+  --teal:#2f6f6c;      /* quiet secondary for "additive / baseline" marks */
+  --accent:#d1870a;    /* marigold: interactions, the one bold color */
+  --display:"Syne","Avenir Next","Segoe UI",sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#101a1f;--card:#15222a;--ink:#e4e9e3;--muted:#97a6a8;--line:#253740;--soft:#1a2a31;--teal:#6fb3ad;--accent:#f0a62a;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#101a1f;--card:#15222a;--ink:#e4e9e3;--muted:#97a6a8;--line:#253740;--soft:#1a2a31;--teal:#6fb3ad;--accent:#f0a62a;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1.08rem;line-height:1.7;-webkit-font-smoothing:antialiased;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));padding-block:0 56px}
+.wrap{max-width:1080px;margin:0 auto}
+.col{max-width:660px}
+a{color:inherit;text-decoration-color:color-mix(in srgb,var(--accent) 70%,transparent);text-underline-offset:3px;text-decoration-thickness:1.5px}
+a:hover{text-decoration-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+p{margin:0 0 16px}
+button{font:inherit;color:inherit}
+::selection{background:color-mix(in srgb,var(--accent) 35%,transparent)}
+
+nav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:26px;font-family:var(--mono);font-size:.78rem;letter-spacing:.03em;color:var(--muted)}
+nav .mark{display:flex;align-items:center;gap:10px;color:var(--ink)}
+nav .mark i{width:9px;height:9px;border-radius:50%;background:var(--accent);display:block}
+nav .links{display:flex;gap:22px;flex-wrap:wrap}
+nav .links a{text-decoration:none}nav .links a:hover{color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:56px;align-items:center;padding-block:40px 72px}
+.hero figure{display:grid;grid-template-columns:270px minmax(0,190px);gap:20px;align-items:end;max-width:100%}
+.hero figure figcaption{margin-top:0;padding-bottom:6px}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(3.2rem,8.5vw,6rem);line-height:.9;letter-spacing:-.035em;margin:0 0 28px}
+.hero h1 span{color:var(--accent)}
+.lede{font-size:clamp(1.2rem,2.2vw,1.42rem);line-height:1.45;margin:0 0 24px;max-width:28ch;text-wrap:balance}
+.lede em{font-style:italic;color:var(--accent)}
+.meta{font-family:var(--mono);font-size:.78rem;color:var(--muted);line-height:2;margin:0}
+.meta b{color:var(--ink);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.chips a{font-family:var(--mono);font-size:.76rem;text-decoration:none;background:var(--card);border:1px solid var(--line);padding:7px 14px;border-radius:999px;transition:border-color .2s,transform .2s}
+.chips a:hover{border-color:var(--accent);transform:translateY(-1px)}
+figure{margin:0}
+.land{aspect-ratio:1/1;width:100%;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px}
+.land canvas{width:100%;height:100%;display:block;cursor:crosshair}
+figcaption{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin-top:12px;line-height:1.6;max-width:52ch}
+figcaption b{color:var(--ink);font-weight:500}
+
+section{padding-block:84px;border-top:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1.5px;background:var(--accent)}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,3.8vw,2.6rem);line-height:1.08;letter-spacing:-.02em;margin:0 0 22px;text-wrap:balance}
+h3{font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em;margin:0 0 8px}
+
+/* ---------- scale ladder ---------- */
+.ladder{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:36px}
+.rung{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:border-color .25s,background .25s,transform .25s,color .25s}
+.rung:hover{border-color:var(--accent);transform:translateY(-2px)}
+.rung[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.rung svg{width:100%;height:58px;display:block}
+.rung .n{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;opacity:.65}
+.rung .t{font-family:var(--display);font-weight:700;font-size:1.02rem;line-height:1.2}
+.rung .ln{stroke:currentColor;fill:none;stroke-width:1.6}
+.rung .dot{fill:currentColor}
+.rung .hot{fill:var(--accent)}
+.panel{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:44px;margin-top:34px;padding:30px 32px;background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:190px}
+.panel .q{font-size:1.18rem;line-height:1.55;margin:0}
+.panel .papers{list-style:none;margin:0;padding:0;display:grid;gap:16px;align-content:start}
+.panel .papers li{border-left:2px solid var(--accent);padding-left:14px;font-size:.96rem;line-height:1.45}
+.panel .papers small{display:block;font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:4px}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:.25;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- figure spreads ---------- */
+.spread{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:56px;align-items:start}
+.spread.flip{grid-template-columns:minmax(0,1.08fr) minmax(0,1fr)}
+.figbox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+.figbox svg{width:100%;height:auto;display:block}
+.figbox text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.figlabel{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.figlabel b{color:var(--ink);font-weight:500}
+.ctrl{display:flex;align-items:center;gap:14px;margin-top:16px;font-family:var(--mono);font-size:.8rem;flex-wrap:wrap}
+.ctrl label{color:var(--muted)}
+.seg{display:inline-flex;background:var(--soft);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;font-family:var(--mono);font-size:.76rem;cursor:pointer;color:var(--muted);transition:background .2s,color .2s}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 18%,transparent)}
+.eq{font-family:var(--mono);font-size:.9rem;background:var(--soft);padding:12px 16px;border-radius:10px;margin:16px 0 0;overflow-x:auto;white-space:nowrap}
+.eq .a{color:var(--teal)}.eq .hl{color:var(--accent)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:26px 0 22px}
+.facts div{border-top:1.5px solid var(--ink);padding-top:10px}
+.facts b{display:block;font-family:var(--display);font-size:1.9rem;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.facts span{font-size:.9rem;color:var(--muted);line-height:1.4;display:block;margin-top:4px}
+.points{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:10px}
+.points li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;font-size:1rem;line-height:1.55}
+.points li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:.62em}
+.ref{display:block;margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--soft);font-family:var(--mono);font-size:.74rem;line-height:1.6;color:var(--muted);text-decoration:none;transition:background .2s}
+.ref b{color:var(--ink);font-weight:500}
+.ref:hover{background:color-mix(in srgb,var(--accent) 14%,var(--soft))}
+.ref .go{color:var(--accent)}
+.tasks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}
+.tasks button{background:var(--soft);border:1px solid transparent;border-radius:10px;padding:9px 12px;font-family:var(--mono);font-size:.74rem;cursor:pointer;text-align:left;transition:border-color .2s,background .2s}
+.tasks button:hover{border-color:var(--line)}
+.tasks button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.taskdesc{margin-top:14px;font-size:.98rem;line-height:1.55;min-height:3.2em}
+
+/* ---------- publications ---------- */
+.pubgroup{margin-top:34px}
+.pubgroup h3{font-family:var(--mono);font-weight:500;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.pubs{list-style:none;padding:0;margin:0}
+.pub{display:grid;grid-template-columns:70px minmax(0,1fr);gap:22px;padding-block:18px;border-top:1px solid var(--line)}
+.pub:last-child{border-bottom:1px solid var(--line)}
+.pub .yr{font-family:var(--mono);font-size:.82rem;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}
+.pub .ti{font-size:1.04rem;line-height:1.42}
+.pub .ti a{text-decoration:none}
+.pub .ti a:hover{text-decoration:underline;text-decoration-color:var(--accent)}
+.pub .au{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin-top:6px;line-height:1.55}
+.pub .au b{color:var(--ink);font-weight:500}
+.badge{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 60%,transparent);border-radius:999px;padding:1px 8px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+
+/* ---------- cv ---------- */
+.cv{margin-top:14px;position:relative;padding-left:26px}
+.cv::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:1.5px;background:var(--line)}
+.cv div{position:relative;display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding-block:14px}
+.cv div::before{content:"";position:absolute;left:-26px;top:22px;width:11px;height:11px;border-radius:50%;background:var(--paper);border:1.5px solid var(--ink)}
+.cv div.now::before{background:var(--accent);border-color:var(--accent)}
+.cv .when{font-family:var(--mono);font-size:.78rem;color:var(--muted);padding-top:4px}
+.cv .what b{font-family:var(--display);font-weight:700}
+.cv .what span{display:block;color:var(--muted);font-size:.96rem}
+
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:30px;border-top:1px solid var(--line);font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.copy{background:var(--card);border:1px solid var(--line);font:inherit;padding:4px 10px;border-radius:999px;cursor:pointer;margin-left:8px}
+.copy:hover{border-color:var(--accent)}
+
+@media (max-width:860px){
+  .hero,.spread,.spread.flip,.panel{grid-template-columns:1fr;gap:30px}
+  .hero{padding-block:16px 60px}
+  .hero figure{grid-template-columns:minmax(0,220px) minmax(0,1fr)}
+  .ladder{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .panel{padding:22px}
+  .spread.flip .figbox{order:2}
+  .pub{grid-template-columns:1fr;gap:2px}
+  .cv div{grid-template-columns:1fr;gap:2px}
+  section{padding-block:60px}
+}
+@media (max-width:480px){.hero figure{grid-template-columns:1fr;gap:12px}.hero .land{max-width:260px}}
+@media (max-width:420px){.facts{grid-template-columns:1fr}.tasks{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+body{margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <span class="mark"><i></i>palash sethi</span>
+    <div class="links"><a href="#research">research</a><a href="#epistasis">epistasis</a><a href="#bacpt">bacpt</a><a href="#papers">papers</a><a href="#cv">cv</a></div>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1>Palash<br>Sethi<span>.</span></h1>
+      <p class="lede">I build machine learning models that predict how biological systems behave and also show <em>which interactions</em> are responsible.</p>
+      <p class="meta"><b>PhD candidate</b>, Computational Biology<br>University of Florida · Zhou Lab</p>
+      <div class="chips">
+        <a href="https://scholar.google.com/citations?user=MzpIU5kAAAAJ&amp;hl=en">Google Scholar</a>
+        <a href="https://github.com/palsetuf">GitHub</a>
+        <a href="#cv">CV</a>
+      </div>
+    </div>
+    <figure>
+      <div class="land"><canvas id="land" tabindex="0" aria-label="Animated fitness landscape. Click to drop a new population."></canvas></div>
+      <figcaption>A fitness landscape shaped by epistasis. Each orange dot is a population climbing toward a peak, and the ripples in the surface come from interactions between mutations, which create peaks that a purely additive landscape would not have. Click anywhere to add a population.</figcaption>
+    </figure>
+  </header>
+
+  <!-- ===== research thread ===== -->
+  <section id="research">
+    <div class="col">
+      <h2>Research</h2>
+      <p>Much of my work comes back to a simple phenomenon of epistasis: in biology, parts rarely act alone. The effect of a mutation depends on the other mutations in the same protein, the role of a gene depends on the genome around it, and the success of a bacterium depends on the neighbors it meets. I build models that predict these outcomes while also revealing the interactions behind them, and the examples below follow this idea from the smallest scale to the largest.</p>
+    </div>
+
+    <div class="ladder" role="tablist" aria-label="Scales of biological interaction">
+      <button class="rung" role="tab" data-k="0" aria-selected="true">
+        <svg viewBox="0 0 160 58" aria-hidden="true">
+          <path class="ln" d="M8 36 Q 28 12 48 32 T 88 30 T 128 32 T 152 24"/>
+          <circle class="dot" cx="8" cy="36" r="5"/><circle class="dot hot" cx="48" cy="32" r="5.5"/><circle class="dot" cx="88" cy="30" r="5"/><circle class="dot hot" cx="128" cy="32" r="5.5"/><circle class="dot" cx="152" cy="24" r="5"/>
+          <path d="M48 41 Q 88 60 128 41" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="3 3"/>
+        </svg>
+        <span class="t">Residues in a protein</span>
+      </button>
+      <button class="rung" role="tab" data-k="1" aria-selected="false">
+        <svg viewBox="0 0 160 58" aria-hidden="true">
+          <g class="dot">
+            <rect x="8" y="32" width="14" height="18" rx="2"/><rect x="28" y="14" width="14" height="36" rx="2"/><rect x="48" y="32" width="14" height="18" rx="2"/><rect x="68" y="46" width="14" height="4" rx="2"/>
+            <rect x="88" y="14" width="14" height="36" rx="2" class="hot"/><rect x="108" y="32" width="14" height="18" rx="2"/><rect x="128" y="14" width="14" height="36" rx="2" class="hot"/>
+          </g>
+        </svg>
+        <span class="t">Genes in a genotype</span>
+      </button>
+      <button class="rung" role="tab" data-k="2" aria-selected="false">
+        <svg viewBox="0 0 160 58" aria-hidden="true">
+          <g class="dot"><circle cx="30" cy="20" r="6"/><circle cx="52" cy="40" r="5"/><circle cx="74" cy="17" r="7"/><circle cx="98" cy="38" r="6"/><circle cx="120" cy="18" r="5"/><circle cx="138" cy="42" r="6"/><circle cx="16" cy="44" r="4"/></g>
+          <circle class="hot" cx="98" cy="38" r="6"/>
+          <circle cx="82" cy="29" r="27" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+        </svg>
+        <span class="t">Genes in a genome</span>
+      </button>
+      <button class="rung" role="tab" data-k="3" aria-selected="false">
+        <svg viewBox="0 0 160 58" aria-hidden="true">
+          <ellipse class="ln" cx="46" cy="29" rx="30" ry="17"/><ellipse class="ln" cx="114" cy="29" rx="30" ry="17"/>
+          <path d="M74 23 L 86 23 M82 19 L 86 23 L 82 27" stroke="var(--accent)" stroke-width="1.6" fill="none"/>
+          <path d="M86 35 L 74 35 M78 31 L 74 35 L 78 39" stroke="var(--accent)" stroke-width="1.6" fill="none"/>
+        </svg>
+        <span class="t">Microbes in a community</span>
+      </button>
+    </div>
+
+    <div class="panel" id="panel" role="tabpanel" aria-live="polite"></div>
+  </section>
+
+  <!-- ===== epistasis ===== -->
+  <section id="epistasis">
+    <div class="spread">
+      <div>
+        <h2>Higher-order epistasis in proteins</h2>
+        <p>Mutations in a protein often change each other's effects, and these interactions can span many positions at once. Measuring them beyond pairs has been difficult, because the number of possible combinations grows so quickly.</p>
+        <p>The epistatic transformer makes this tractable. With the softmax, layer normalization and feed-forward blocks removed, the depth of the model sets exactly how complex its interactions can be, so comparing models of different depths shows how much each level of interaction contributes. Across ten large protein datasets, higher-order epistasis turned out to matter most when predicting sequences far from the training data.</p>
+        <a class="ref" href="https://elifesciences.org/reviewed-preprints/108005"><b>Sethi &amp; Zhou.</b> An interpretable neural network unveils higher-order epistasis in large protein sequence–function relationships. eLife (reviewed preprint). <span class="go">Read →</span></a>
+      </div>
+      <div class="figbox">
+        <div class="figlabel"><span>Depth sets interaction order</span><span id="ordlabel">order 2</span></div>
+        <svg id="depthfig" viewBox="0 0 420 230" role="img" aria-label="Eight positions in a protein with arcs showing the largest interaction a model of the chosen depth can capture"></svg>
+        <div class="ctrl">
+          <label>Attention layers</label>
+          <div class="seg" role="group" aria-label="Number of attention layers">
+            <button type="button" data-m="1" aria-pressed="true">1</button>
+            <button type="button" data-m="2" aria-pressed="false">2</button>
+            <button type="button" data-m="3" aria-pressed="false">3</button>
+          </div>
+        </div>
+        <div class="eq" id="eq"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== bacpt ===== -->
+  <section id="bacpt">
+        <div class="spread flip">
+      <div class="figbox">
+        <div class="figlabel"><span>One model, many tasks</span><span>choose a task below</span></div>
+        <svg id="bacfig" viewBox="0 0 420 220" role="img" aria-label="Diagram: a bacterial genome goes into BacPT, which produces gene and genome embeddings used for several prediction tasks"></svg>
+        <div class="tasks" role="group" aria-label="Choose a downstream task">
+          <button type="button" data-t="0" aria-pressed="true">enzyme activity</button>
+          <button type="button" data-t="1" aria-pressed="false">biosynthetic gene clusters</button>
+          <button type="button" data-t="2" aria-pressed="false">metabolic traits</button>
+          <button type="button" data-t="3" aria-pressed="false">ecological interactions</button>
+        </div>
+        <p class="taskdesc" id="taskdesc"></p>
+      </div>
+      <div>
+        <h2>A foundation model for bacterial genomes</h2>
+        <p>Most sequenced bacteria carry genes whose functions are still unknown, and protein language models usually look at each protein on its own. BacPT instead reads the whole proteome of a genome. Trained on tens of thousands of complete bacterial genomes, it learns a representation for each gene in its genomic context, along with one for the genome as a whole.</p>
+        <p>These representations improve predictions across scales, from enzyme activity and biosynthetic gene clusters to metabolic traits and interactions between species.</p>
+        <a class="ref" href="https://doi.org/10.64898/2026.03.07.710335"><b>Sethi, Pereira &amp; Zhou.</b> Bacterial proteome foundation model enhances functional prediction from enzymes to ecological interactions. bioRxiv, 2026 · in revision. <span class="go">Read →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== publications ===== -->
+  <section id="papers">
+    <h2>Publications</h2>
+
+    <div class="pubgroup">
+      <h3>First author</h3>
+      <ul class="pubs">
+        <li class="pub"><span class="yr">2026</span><div><div class="ti"><a href="https://doi.org/10.64898/2026.03.07.710335">Bacterial proteome foundation model enhances functional prediction from enzymes to ecological interactions</a><span class="badge">in revision</span></div><div class="au"><b>P Sethi</b>, LA Pereira, J Zhou · bioRxiv</div></div></li>
+        <li class="pub"><span class="yr">2025</span><div><div class="ti"><a href="https://elifesciences.org/reviewed-preprints/108005">An interpretable neural network unveils higher-order epistasis in large protein sequence–function relationships</a></div><div class="au"><b>P Sethi</b>, J Zhou · eLife (reviewed preprint)</div></div></li>
+      </ul>
+    </div>
+
+    <div class="pubgroup">
+      <h3>Collaborations</h3>
+      <ul class="pubs">
+        <li class="pub"><span class="yr">2026</span><div><div class="ti">Synthesis cost is a hidden driver of convergent amino acid composition in plastid ribosomal proteins</div><div class="au">A Chaudhari, <b>P Sethi</b>, Y Vilbrun, J Zhou, L Cai · bioRxiv</div></div></li>
+        <li class="pub"><span class="yr">2026</span><div><div class="ti">Genetic background shapes AI-predicted variant effects</div><div class="au">BM Schilder, Z Liu, JJ Desmarais, D Laub, F Rahimi, <b>P Sethi</b>, LA Pereira, et al. · bioRxiv</div></div></li>
+        <li class="pub"><span class="yr">2024</span><div><div class="ti">CRISPR-Cas system positively regulates virulence of <i>Salmonella enterica</i> serovar Typhimurium</div><div class="au">N Sharma, A Das, AV Nair, <b>P Sethi</b>, VD Negi, D Chakravortty, SA Marathe · Gut Pathogens</div></div></li>
+      </ul>
+    </div>
+
+    <div class="pubgroup">
+      <h3>Patents</h3>
+      <ul class="pubs">
+        <li class="pub"><span class="yr">2026</span><div><div class="ti">Method and system for learning behavior of highly complex and non-linear systems<span class="badge">granted</span></div><div class="au">S Kumar, <b>P Sethi</b> · US Patent 12,530,566</div></div></li>
+        <li class="pub"><span class="yr">2024</span><div><div class="ti">System and method for optimizing non-linear constraints of an industrial process unit</div><div class="au">S Kumar, <b>P Sethi</b> · US Patent App. 18/699,979</div></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== cv ===== -->
+  <section id="cv">
+    <div class="col">
+      <h2>Background</h2>
+      <p>I came to computational biology through engineering. At BITS Pilani I studied electronics and instrumentation alongside biological sciences, and my master's thesis with Sandhya Marathe predicted CRISPR-regulated self-target genes in <i>Salmonella</i> Typhimurium. Along the way I modeled miRNA–mRNA interactions, worked on DNA- and RNA-binding protein prediction with Shandar Ahmad at JNU New Delhi, and built a vehicle traffic estimation pipeline at the Indian Institute of Science that was later adopted for traffic control in Bangalore.</p>
+      <p>After graduating, I spent three years as a data scientist on the machine learning research team at Reliance Jio. There I built a co-occurrence based GWAS system that ran on 3,000 rice genomes, modeled crude-oil refineries with neural network digital twins, and developed a sampling method for black-box systems that led to a granted US patent. In 2022 I joined the University of Florida for my PhD with Juannan Zhou, spending the summer of 2023 at Evozyne in Chicago working on protein sequence–function modeling, and was named a UF Biodiversity Institute Fellow for 2024–25.</p>
+    </div>
+    <div class="cv">
+      <div class="now"><span class="when">2022 – present</span><span class="what"><b>University of Florida</b><span>PhD in Computational Biology, Zhou Lab · UF Biodiversity Institute Fellow, 2024–25</span></span></div>
+      <div><span class="when">Summer 2023</span><span class="what"><b>Evozyne, Chicago</b><span>Computation intern, protein sequence–function modeling</span></span></div>
+      <div><span class="when">2019 – 2022</span><span class="what"><b>Reliance Jio</b><span>Data scientist, machine learning research team</span></span></div>
+      <div><span class="when">2018</span><span class="what"><b>Indian Institute of Science, Bangalore</b><span>Project assistant, Robert Bosch Centre for Cyber-Physical Systems</span></span></div>
+      <div><span class="when">2017</span><span class="what"><b>JNU New Delhi</b><span>Undergraduate researcher, SciWhy Lab</span></span></div>
+      <div><span class="when">2014 – 2019</span><span class="what"><b>BITS Pilani</b><span>B.E. (Hons.) Electronics and Instrumentation, M.Sc. (Hons.) Biological Sciences</span></span></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>palash sethi · university of florida</span>
+    <span>email: <span id="mail">palash.sethi@ufl.edu</span><button class="copy" id="copy" type="button">copy</button></span>
+  </footer>
+</div>
+
+<script>
+(()=>{
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const NS='http://www.w3.org/2000/svg';
+  const el=(t,a={},txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+
+  /* ---------- fitness landscape ---------- */
+  const cv=document.getElementById('land'),ctx=cv.getContext('2d');
+  const peaks=[{x:.28,y:.32,h:1,s:.13},{x:.72,y:.25,h:.75,s:.1},{x:.62,y:.7,h:.9,s:.12},{x:.22,y:.76,h:.55,s:.09},{x:.5,y:.48,h:.35,s:.08}];
+  const f=(x,y)=>{let v=.15*x+.1*(1-y);for(const p of peaks){const dx=x-p.x,dy=y-p.y;v+=p.h*Math.exp(-(dx*dx+dy*dy)/(2*p.s*p.s));}return v+.06*Math.sin(9*x)*Math.sin(7*y);};
+  const N=32;let W=0,H=0,grid=[],vmin=1e9,vmax=-1e9;
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){const x=(i+.5)/N,y=(j+.5)/N,v=f(x,y);grid.push({x,y,v});vmin=Math.min(vmin,v);vmax=Math.max(vmax,v);}
+  function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);}
+  let walkers=[];
+  const spawn=(x,y)=>{walkers.push({x:x??Math.random(),y:y??Math.random(),trail:[],age:0,done:false});if(walkers.length>5)walkers.shift();};
+  function step(w){if(w.done){w.age++;return;}const e=.004,gx=(f(w.x+e,w.y)-f(w.x-e,w.y))/(2*e),gy=(f(w.x,w.y+e)-f(w.x,w.y-e))/(2*e),g=Math.hypot(gx,gy);
+    w.trail.push([w.x,w.y]);if(w.trail.length>140)w.trail.shift();if(g<.02){w.done=true;return;}
+    w.x=Math.min(.99,Math.max(.01,w.x+.006*gx/g+(Math.random()-.5)*.004));w.y=Math.min(.99,Math.max(.01,w.y+.006*gy/g+(Math.random()-.5)*.004));}
+  function draw(){const ink=css('--ink'),acc=css('--accent'),teal=css('--teal'),line=css('--line');ctx.clearRect(0,0,W,H);const cell=W/N;
+    for(const p of grid){const t=(p.v-vmin)/(vmax-vmin);ctx.beginPath();ctx.arc(p.x*W,p.y*H,Math.max(.7,t*cell*.44),0,Math.PI*2);
+      ctx.fillStyle=t>.82?acc:(t>.45?ink:(t>.2?teal:line));ctx.globalAlpha=t>.82?.92:.22+t*.5;ctx.fill();}
+    ctx.globalAlpha=1;
+    for(const w of walkers){if(w.trail.length>1){ctx.beginPath();ctx.moveTo(w.trail[0][0]*W,w.trail[0][1]*H);for(const[x,y]of w.trail)ctx.lineTo(x*W,y*H);
+      ctx.strokeStyle=acc;ctx.lineWidth=2;ctx.lineCap='round';ctx.globalAlpha=w.done?Math.max(0,1-w.age/160):1;ctx.stroke();}
+      ctx.beginPath();ctx.arc(w.x*W,w.y*H,5,0,Math.PI*2);ctx.fillStyle=acc;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=css('--card');ctx.stroke();ctx.globalAlpha=1;}}
+  function loop(){walkers.forEach(step);walkers=walkers.filter(w=>!(w.done&&w.age>160));if(walkers.length<3&&Math.random()<.02)spawn();draw();requestAnimationFrame(loop);}
+  cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect();spawn((e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height);if(reduce){for(let k=0;k<400;k++)walkers.forEach(step);draw();}});
+  cv.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();spawn();}});
+  addEventListener('resize',()=>{size();draw();});
+  size();spawn(.12,.9);spawn(.9,.55);spawn(.45,.1);
+  if(reduce){for(let k=0;k<400;k++)walkers.forEach(step);draw();}else loop();
+
+  /* ---------- scale ladder ---------- */
+  const scales=[
+    {q:"Within a single protein, residues can change each other's effects, so a combination of mutations may behave quite differently from what each one suggests alone. My work measures how much of this involves three or more positions acting together, rather than just pairs.",
+     p:[["An interpretable neural network unveils higher-order epistasis in large protein sequence–function relationships","Sethi & Zhou · eLife"],
+        ["Synthesis cost is a hidden driver of convergent amino acid composition in plastid ribosomal proteins","Chaudhari, Sethi, Vilbrun, Zhou, Cai · bioRxiv 2026"]]},
+    {q:"In a diploid organism such as yeast, every gene comes in two copies and thousands of genes vary at once. I extend the epistatic transformer to separate a trait into additive effects, dominance and gene–gene interactions, and in a related collaboration we ask how a variant's effect shifts with its genetic background.",
+     p:[["Epistatic transformer for diploid genotype–phenotype maps","Sethi & Zhou · in preparation"],
+        ["Genetic background shapes AI-predicted variant effects","Schilder, Liu, Desmarais, Laub, Rahimi, Sethi, Pereira, et al. · bioRxiv 2026"]]},
+    {q:"A gene is easier to understand when you can see the genes around it. BacPT reads an entire bacterial proteome at once, so each gene's representation carries its genomic context, which in turn helps predict what the gene does.",
+     p:[["Bacterial proteome foundation model enhances functional prediction from enzymes to ecological interactions","Sethi, Pereira & Zhou · bioRxiv 2026"],
+        ["CRISPR-Cas system positively regulates virulence of Salmonella enterica serovar Typhimurium","Sharma, Das, Nair, Sethi, Negi, Chakravortty, Marathe · Gut Pathogens 2024"]]},
+    {q:"Because BacPT also learns a single representation for each whole genome, it can predict what happens when two bacterial species meet, using nothing more than their genome sequences.",
+     p:[["Bacterial proteome foundation model enhances functional prediction from enzymes to ecological interactions","Sethi, Pereira & Zhou · bioRxiv 2026"]]}
+  ];
+  const panel=document.getElementById('panel'),rungs=[...document.querySelectorAll('.rung')];
+  function showScale(k){
+    rungs.forEach(r=>r.setAttribute('aria-selected',r.dataset.k==k));
+    const s=scales[k];
+    panel.innerHTML=`<p class="q">${s.q}</p><ul class="papers">${s.p.map(([t,a])=>`<li>${t}<small>${a}</small></li>`).join('')}</ul>`;
+    panel.classList.remove('fade');void panel.offsetWidth;panel.classList.add('fade');
+  }
+  rungs.forEach(r=>r.addEventListener('click',()=>showScale(+r.dataset.k)));
+  showScale(0);
+
+  /* ---------- fig 1: depth -> order ---------- */
+  const dfig=document.getElementById('depthfig');let M=1;
+  const L=8,xs=[...Array(L)].map((_,i)=>38+i*49),cy=160;
+  const AA=['K','L','E','G','V','D','Y','P'];
+  function depthDraw(){
+    const ord=2**M,ink=css('--ink'),acc=css('--accent'),muted=css('--muted'),card=css('--card'),line=css('--line');
+    dfig.replaceChildren();
+    const groups={1:[[1,5],[0,3],[4,7]],2:[[0,2,5,7],[1,3,4,6]],3:[[0,1,2,3,4,5,6,7]]}[M];
+    groups.forEach((g,gi)=>{
+      const main=gi===0;
+      for(let a=0;a<g.length-1;a++){
+        const x1=xs[g[a]],x2=xs[g[a+1]],h=22+(x2-x1)*.5+(main?0:8);
+        dfig.appendChild(el('path',{d:`M${x1} ${cy-14} C ${x1} ${cy-14-h}, ${x2} ${cy-14-h}, ${x2} ${cy-14}`,fill:'none',stroke:main?acc:muted,'stroke-width':main?2.4:1.2,'stroke-dasharray':main?'':'3 4','stroke-linecap':'round',opacity:main?1:.55}));
+      }
+    });
+    // backbone
+    dfig.appendChild(el('line',{x1:xs[0],y1:cy,x2:xs[L-1],y2:cy,stroke:line,'stroke-width':2}));
+    xs.forEach((x,i)=>{
+      const on=groups[0].includes(i);
+      dfig.appendChild(el('circle',{cx:x,cy,r:13,fill:on?acc:card,stroke:on?acc:ink,'stroke-width':1.5}));
+      dfig.appendChild(el('text',{x,y:cy+4,'text-anchor':'middle',style:`fill:${on?card:ink};font-size:12px;font-weight:500`},AA[i]));
+      dfig.appendChild(el('text',{x,y:cy+32,'text-anchor':'middle',style:'font-size:10px'},`${12+i*7}`));
+    });
+    dfig.appendChild(el('text',{x:xs[0],y:222},'residue positions in a protein'));
+    document.getElementById('ordlabel').textContent=`${M} layer${M>1?'s':''} → up to ${ord}-way`;
+    const terms=['<span class="a">Σ β<sub>i</sub>x<sub>i</sub></span>',' + <span class="hl">Σ β<sub>ij</sub>x<sub>i</sub>x<sub>j</sub></span>'];
+    if(M>=2)terms.push(' + <span class="hl">Σ β<sub>ijk</sub>x<sub>i</sub>x<sub>j</sub>x<sub>k</sub></span> + …');
+    document.getElementById('eq').innerHTML=`f(x) = g( ${terms.join('')}${M>=2?` <span class="hl">(order ${ord})</span>`:''} )`;
+  }
+  document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+    M=+b.dataset.m;document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));depthDraw();}));
+
+  /* ---------- fig 2: BacPT ---------- */
+  const bfig=document.getElementById('bacfig');let task=0;
+  const taskInfo=[
+    {lvl:'gene',out:['oxidoreductase','transferase','hydrolase'],pick:2,d:'Here BacPT predicts which reaction an enzyme carries out. Because each gene is seen alongside its neighbors, the model picks up signals that a single-protein model would miss.'},
+    {lvl:'gene',out:['in a cluster','not in a cluster'],pick:0,d:'Here BacPT predicts whether a gene belongs to a biosynthetic gene cluster, one of the stretches of genome that bacteria use to build natural products.'},
+    {lvl:'genome',out:['uses glucose','makes acid','motile'],pick:0,d:'Here the representation of the whole genome is used to predict metabolic traits of the organism, directly from its sequence.'},
+    {lvl:'pair',out:['competition','cooperation','neutral'],pick:0,d:'Here the representations of two genomes are combined to predict what happens when the two species are grown together.'}
+  ];
+  function genome(y0,label,hi){
+    const ink=css('--ink'),acc=css('--accent');
+    bfig.appendChild(el('rect',{x:12,y:y0,width:118,height:62,rx:31,fill:'none',stroke:ink,'stroke-width':1.4}));
+    for(let i=0;i<12;i++){const px=32+(i%4)*23,py=y0+16+Math.floor(i/4)*15;
+      bfig.appendChild(el('rect',{x:px-8,y:py-4,width:16,height:8,rx:4,fill:hi===i?acc:ink,opacity:hi===i?1:(hi===-1?.75:.3)}));}
+    bfig.appendChild(el('text',{x:71,y:y0+78,'text-anchor':'middle'},label));
+  }
+  function bacDraw(){
+    bfig.replaceChildren();
+    const ink=css('--ink'),acc=css('--accent'),muted=css('--muted'),card=css('--card'),line=css('--line'),teal=css('--teal');
+    const t=taskInfo[task];
+    if(t.lvl==='pair'){genome(18,'genome A',-1);genome(118,'genome B',-1);
+      [49,149].forEach(y=>bfig.appendChild(el('path',{d:`M132 ${y} C 150 ${y}, 150 112, 166 112`,stroke:muted,'stroke-width':1.2,fill:'none'})));}
+    else{genome(70,'one bacterial genome',t.lvl==='gene'?5:-1);
+      bfig.appendChild(el('path',{d:'M132 101 C 150 101, 150 112, 166 112',stroke:muted,'stroke-width':1.2,fill:'none'}));}
+    bfig.appendChild(el('rect',{x:166,y:86,width:80,height:52,rx:12,fill:ink}));
+    bfig.appendChild(el('text',{x:206,y:116,'text-anchor':'middle',style:`fill:${card};font-weight:500;font-size:13px`},'BacPT'));
+    bfig.appendChild(el('path',{d:'M246 112 L 262 112',stroke:muted,'stroke-width':1.2}));
+    for(let i=0;i<8;i++)bfig.appendChild(el('rect',{x:264,y:84+i*7,width:20,height:5.5,rx:1.5,fill:teal,opacity:.3+.09*((i*5)%8)}));
+    bfig.appendChild(el('text',{x:274,y:156,'text-anchor':'middle'},t.lvl==='gene'?'gene':'genome'));
+    bfig.appendChild(el('path',{d:'M288 112 L 304 112',stroke:muted,'stroke-width':1.2}));
+    const n=t.out.length,top=112-(n-1)*15;
+    t.out.forEach((l,i)=>{
+      const y=top+i*30,on=i===t.pick;
+      bfig.appendChild(el('rect',{x:306,y:y-12,width:104,height:24,rx:12,fill:on?acc:'none',stroke:on?acc:line,'stroke-width':1.2}));
+      bfig.appendChild(el('text',{x:358,y:y+4,'text-anchor':'middle',style:`fill:${on?card:ink}`},l));
+    });
+    document.getElementById('taskdesc').textContent=t.d;
+  }
+  document.querySelectorAll('.tasks button').forEach(b=>b.addEventListener('click',()=>{
+    task=+b.dataset.t;document.querySelectorAll('.tasks button').forEach(x=>x.setAttribute('aria-pressed',x===b));bacDraw();}));
+
+  /* ---------- theme redraw ---------- */
+  const redraw=()=>{depthDraw();bacDraw();draw();};
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',redraw);
+  new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  depthDraw();bacDraw();
+
+  /* ---------- copy email ---------- */
+  const btn=document.getElementById('copy');
+  btn.addEventListener('click',()=>{
+    const t=document.getElementById('mail').textContent;
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('mail'));const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='selected';};
+    try{navigator.clipboard.writeText(t).then(()=>{btn.textContent='copied';setTimeout(()=>btn.textContent='copy',1400);},sel);}catch(e){sel();}
+  });
+})();
+</script>
+</body>
+</html>
