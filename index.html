@@ -91,7 +91,8 @@ h3{font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-
 /* ---------- figure spreads ---------- */
 .spread{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:56px;align-items:start}
 .spread.flip{grid-template-columns:minmax(0,1.08fr) minmax(0,1fr)}
-.figbox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+.figbox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;min-width:0}
+.spread>div{min-width:0}
 .figbox svg{width:100%;height:auto;display:block}
 .figbox text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
 .figlabel{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -149,7 +150,8 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
 .copy:hover{border-color:var(--accent)}
 
 @media (max-width:860px){
-  .hero,.spread,.spread.flip,.panel{grid-template-columns:1fr;gap:30px}
+  .hero,.spread,.spread.flip,.panel{grid-template-columns:minmax(0,1fr);gap:30px}
+  .eq{white-space:normal;line-height:1.9;overflow-x:visible}
   .hero{padding-block:16px 60px}
   .hero figure{grid-template-columns:minmax(0,220px) minmax(0,1fr)}
   .ladder{grid-template-columns:repeat(2,minmax(0,1fr))}
